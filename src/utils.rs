@@ -70,3 +70,27 @@ pub fn retrieve_iam_actions_json() -> Result<String, Box<dyn std::error::Error>>
         Ok(iam_actions_json)
     }
 }
+
+/// Deletes the cached AWS IAM actions data file.
+///
+/// This function removes the cache file located at `~/.cache/aws_iam_expansion/aws_iam_actions.json`
+/// if it exists. This is useful for forcing a fresh fetch of the latest AWS IAM actions data
+/// from the API on the next retrieval.
+///
+/// # Returns
+/// A `Result` indicating success or failure of the deletion operation.
+///
+/// # Examples
+/// ```no_run
+/// delete_iam_actions_cache()?;
+/// ```
+pub fn delete_iam_actions_cache() -> Result<(), Box<dyn std::error::Error>> {
+    let cache_path = cache_file_path();
+    if std::path::Path::new(&cache_path).exists() {
+        std::fs::remove_file(&cache_path)?;
+        println!("[*] Deleted AWS IAM actions cache.");
+    } else {
+        println!("[!] No AWS IAM actions cache found to delete.");
+    }
+    Ok(())
+}

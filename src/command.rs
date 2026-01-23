@@ -287,6 +287,12 @@ pub enum Action {
     /// and outputs the expanded policy either to the console or to a specified output file.
     #[command(name = "expand-file")]
     ExpandFile(ExpandFileSubCommand),
+
+    /// Delete cached data files used by the toolkit.
+    ///
+    /// This command removes any locally stored cache files to free up space
+    /// or reset the cached state.
+    DeleteCache,
 }
 
 /// Represents the top-level command-line arguments and options.
@@ -340,6 +346,10 @@ impl Args {
             Action::Expand(expand_sub_cmd) => expand_sub_cmd.handle(available_services_permissions),
             Action::ExpandFile(expand_file_sub_cmd) => {
                 expand_file_sub_cmd.handle(available_services_permissions)
+            }
+            Action::DeleteCache => {
+                crate::utils::delete_iam_actions_cache()?;
+                Ok(())
             }
         }
     }

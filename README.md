@@ -122,6 +122,24 @@ To save the output to a file, use the `--output-file` flag:
 aws-iam-expansion expand-file --policy-file policy.json --output-file expanded-policy.json
 ```
 
+#### Delete Cache
+
+Delete the locally cached AWS IAM actions data file. This is useful when you want to force a fresh fetch of the latest AWS IAM actions data from the API on the next run.
+
+```bash
+aws-iam-expansion delete-cache
+```
+
+Example output:
+```
+[*] Deleted AWS IAM actions cache.
+```
+
+If no cache exists, the command will notify you:
+```
+[!] No AWS IAM actions cache found to delete.
+```
+
 ### Data Caching
 
 The toolkit automatically caches the AWS IAM actions data locally at:
@@ -132,7 +150,13 @@ The toolkit automatically caches the AWS IAM actions data locally at:
 
 On the first run, the data is fetched from the AWS IAM Actions API. Subsequent runs use the cached data unless you manually delete the cache file.
 
-To force a fresh data fetch, simply delete the cache:
+To force a fresh data fetch, use the `delete-cache` command:
+
+```bash
+aws-iam-expansion delete-cache
+```
+
+Alternatively, you can manually delete the cache file:
 
 ```bash
 rm ~/.cache/aws_iam_expansion/aws_iam_actions.json
@@ -155,7 +179,7 @@ rm ~/.cache/aws_iam_expansion/aws_iam_actions.json
 
 ## TODOs
 
-- [ ] Delete cache command
+- [x] Delete cache command
 - [ ] Update to latest AWS IAM Actions API endpoint if it changes
 - [x] Expand functionality to handle policy documents directly
 
