@@ -8,10 +8,11 @@ The AWS IAM Expansion Toolkit helps security professionals and developers unders
 
 The toolkit fetches the complete list of AWS IAM actions and services from the [AWS IAM Actions API](https://www.awsiamactions.io/) and provides an efficient command-line interface to:
 
-- **List all available AWS services** with their service prefixes
-- **Expand IAM actions** for a specific service, optionally filtered by action name prefix
-- **Efficiently search** for actions using trie-based prefix matching
-- **Cache data locally** to avoid redundant API calls
+- **List all available AWS services** with their service prefixes.
+- **Expand IAM actions** for a specific service, optionally filtered by action name prefix.
+- **Expand wildcard actions** directly from an IAM policy file.
+- **Efficiently search** for actions using trie-based prefix matching.
+- **Cache data locally** to avoid redundant API calls.
 
 ## Command Line Usage
 
@@ -26,6 +27,7 @@ The toolkit fetches the complete list of AWS IAM actions and services from the [
 git clone <repository-url>
 cd aws-iam-expansion
 cargo build --release
+# The binary will be available at target/release/aws-iam-expansion
 ```
 
 ### Commands
@@ -79,11 +81,45 @@ Example output:
 	[-] iam:CreateAccessKey
 	[-] iam:CreateGroup
 	[-] iam:CreateInstanceProfile
-	[-] iam:CreateLoginProfile
-	[-] iam:CreateOpenIDConnectProvider
-	[-] iam:CreateRole
-	[-] iam:CreateUser
 	...
+```
+
+#### Expand Actions from a Policy File
+
+Expand wildcard actions within an entire IAM policy file. The command reads a local JSON policy file, expands all `Action` and `NotAction` fields, and outputs the fully expanded policy.
+
+**Example Input Policy (`policy.json`)**
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:Get*",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:Create*",
+        "iam:DeleteRole"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+**Command:**
+```bash
+aws-iam-expansion expand-file --policy-file policy.json
+```
+
+This will print the expanded policy to the console.
+
+To save the output to a file, use the `--output-file` flag:
+```bash
+aws-iam-expansion expand-file --policy-file policy.json --output-file expanded-policy.json
 ```
 
 ### Data Caching
@@ -104,26 +140,29 @@ rm ~/.cache/aws_iam_expansion/aws_iam_actions.json
 
 ## Features
 
-- **Efficient Search**: Uses trie data structure for fast prefix-based searching
-- **Local Caching**: Caches API responses to minimize network requests
-- **Simple CLI**: Intuitive command-line interface using the `clap` framework
-- **Comprehensive Documentation**: Fully documented code with extensive docstrings
+- **Efficient Search**: Uses trie data structure for fast prefix-based searching.
+- **Local Caching**: Caches API responses to minimize network requests.
+- **Policy File Expansion**: Directly expands wildcard actions in IAM policy files.
+- **Simple CLI**: Intuitive command-line interface using the `clap` framework.
+- **Comprehensive Documentation**: Fully documented code with extensive docstrings.
 
 ## Use Cases
 
-- Audit IAM policies to understand the scope of wildcard permissions
-- Discover available actions when creating least-privilege policies
-- Generate complete action lists for security documentation
-- Understand which permissions are granted by wildcard service specs
+- Audit IAM policies to understand the scope of wildcard permissions.
+- Discover available actions when creating least-privilege policies.
+- Generate complete action lists for security documentation.
+- Understand which permissions are granted by wildcard service specs.
 
 ## TODOs
 
 - [ ] Delete cache command
 - [ ] Update to latest AWS IAM Actions API endpoint if it changes
+- [x] Expand functionality to handle policy documents directly
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
 
 ## Contributing
 

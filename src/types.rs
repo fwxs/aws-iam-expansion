@@ -51,3 +51,46 @@ pub struct AwsService {
     #[serde(rename = "actions")]
     pub actions: Vec<AwsAction>,
 }
+
+/// Represents a single statement within an AWS IAM policy document.
+/// A policy statement defines the permissions granted or denied for specific actions
+/// on AWS resources.
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub struct AWSPolicyStatement {
+    #[serde(rename = "Sid", skip_serializing_if = "Option::is_none")]
+    pub sid: Option<String>,
+
+    #[serde(rename = "Effect")]
+    pub effect: String,
+
+    #[serde(rename = "Principal", skip_serializing_if = "Option::is_none")]
+    pub principal: Option<serde_json::Value>,
+
+    #[serde(rename = "Action")]
+    pub action: serde_json::Value,
+
+    #[serde(rename = "NotAction", skip_serializing_if = "Option::is_none")]
+    pub not_action: Option<serde_json::Value>,
+
+    #[serde(rename = "Resource", skip_serializing_if = "Option::is_none")]
+    pub resource: Option<serde_json::Value>,
+
+    #[serde(rename = "NotResource", skip_serializing_if = "Option::is_none")]
+    pub not_resource: Option<serde_json::Value>,
+
+    #[serde(rename = "Condition", skip_serializing_if = "Option::is_none")]
+    pub condition: Option<serde_json::Value>,
+}
+
+/// Represents a single statement within an AWS IAM policy document.
+/// A policy statement defines the permissions granted or denied for specific actions
+/// on AWS resources.
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub struct AWSPolicyDocument {
+    #[serde(rename = "Version")]
+    pub version: String,
+    #[serde(rename = "Id", skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "Statement")]
+    pub statement: Vec<AWSPolicyStatement>,
+}
