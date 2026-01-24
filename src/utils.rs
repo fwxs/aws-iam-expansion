@@ -81,6 +81,7 @@ pub fn retrieve_iam_actions_json() -> Result<String, Box<dyn std::error::Error>>
 /// A `Result` indicating success or failure of the deletion operation.
 ///
 /// # Examples
+///
 /// ```no_run
 /// delete_iam_actions_cache()?;
 /// ```
@@ -92,5 +93,26 @@ pub fn delete_iam_actions_cache() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         println!("[!] No AWS IAM actions cache found to delete.");
     }
+    Ok(())
+}
+
+/// Updates the cached AWS IAM actions data by fetching the latest version.
+///
+/// This function deletes the existing cache file (if any) and retrieves the latest
+/// AWS IAM actions data from the API, storing it in the cache for future use.
+///
+/// # Returns
+///
+/// A `Result` indicating success or failure of the update operation.
+///
+/// # Examples
+///
+/// ```no_run
+/// update_iam_actions_cache()?;
+/// ```
+pub fn update_iam_actions_cache() -> Result<(), Box<dyn std::error::Error>> {
+    delete_iam_actions_cache()?;
+    retrieve_iam_actions_json()?;
+    println!("[*] Updated AWS IAM actions cache.");
     Ok(())
 }

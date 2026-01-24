@@ -293,6 +293,13 @@ pub enum Action {
     /// This command removes any locally stored cache files to free up space
     /// or reset the cached state.
     DeleteCache,
+
+    /// Update the cached AWS IAM actions data.
+    ///
+    /// This command fetches the latest AWS IAM actions from the API
+    /// and updates the local cache.
+    #[command(name = "update-cache")]
+    UpdateCache,
 }
 
 /// Represents the top-level command-line arguments and options.
@@ -349,6 +356,10 @@ impl Args {
             }
             Action::DeleteCache => {
                 crate::utils::delete_iam_actions_cache()?;
+                Ok(())
+            }
+            Action::UpdateCache => {
+                crate::utils::update_iam_actions_cache()?;
                 Ok(())
             }
         }

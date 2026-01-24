@@ -140,6 +140,21 @@ If no cache exists, the command will notify you:
 [!] No AWS IAM actions cache found to delete.
 ```
 
+#### Update Cache
+
+Update the locally cached AWS IAM actions data by fetching the latest version from the API. This is useful when you want to refresh your cache with the most current AWS IAM actions without manually deleting and re-fetching.
+
+```bash
+aws-iam-expansion update-cache
+```
+
+Example output:
+```
+[*] Deleted AWS IAM actions cache.
+[*] Fetching AWS IAM actions...
+[*] Updated AWS IAM actions cache.
+```
+
 ### Data Caching
 
 The toolkit automatically caches the AWS IAM actions data locally at:
@@ -150,13 +165,19 @@ The toolkit automatically caches the AWS IAM actions data locally at:
 
 On the first run, the data is fetched from the AWS IAM Actions API. Subsequent runs use the cached data unless you manually delete the cache file.
 
-To force a fresh data fetch, use the `delete-cache` command:
+To force a fresh data fetch and update the cache with the latest data, use the `update-cache` command:
+
+```bash
+aws-iam-expansion update-cache
+```
+
+Alternatively, you can use the `delete-cache` command to remove the cache, which will be automatically re-fetched on the next command:
 
 ```bash
 aws-iam-expansion delete-cache
 ```
 
-Alternatively, you can manually delete the cache file:
+Or manually delete the cache file:
 
 ```bash
 rm ~/.cache/aws_iam_expansion/aws_iam_actions.json
@@ -180,7 +201,7 @@ rm ~/.cache/aws_iam_expansion/aws_iam_actions.json
 ## TODOs
 
 - [x] Delete cache command
-- [ ] Update to latest AWS IAM Actions API endpoint if it changes
+- [x] Update to latest AWS IAM Actions API endpoint if it changes
 - [x] Expand functionality to handle policy documents directly
 
 ## License
